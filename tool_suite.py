@@ -2,6 +2,8 @@ import subprocess
 import os
 from pathlib import Path
 
+from tool import Tool
+
 def run_command_in_terminal(command:str)->str:
     return subprocess.run(command,shell=True,capture_output=True,text=True).stdout
 
@@ -119,3 +121,11 @@ def write_file(filename:str,content:str)->bool:
     except Exception as e:
         print(e)
         return False
+
+TOOL_FUNCTIONS=[get_cwd,set_cwd,create_file,delete_file,read_file,write_file]
+
+TOOLS=[]
+
+def init():
+    for tool in TOOL_FUNCTIONS:
+        TOOLS.append(Tool(tool.__name__,tool.__doc__,tool))

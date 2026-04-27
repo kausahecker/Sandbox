@@ -1,29 +1,31 @@
-from dotenv import load_dotenv
 from google import genai
 import os
 
-load_dotenv()
-client=genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+class LLM:
+    def __init__(self,name:str,sys_prompt:str,type:str):
+        self.client=genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        self.name=name
+        self.sys_prompt=sys_prompt
 
-def chat(query:str,history:list[dict]=None)->str:
-    if not history:
-        history=[{
-            "role":"system",
-            "parts":[{
-                "text":"SYSTEM PROMPT"
+    def chat(self,query:str,history:list[dict]=None)->str:
+        if not history or len(history)==0:
+            history=[{
+                "role":"system",
+                "parts":[{
+                    "text":self.sys_prompt
+                }]
+            },{
+                "role":"user",
+                "parts":[{
+                    "text":query
+                }]
             }]
-        },{
-            "role":"user",
+        response=self.client.models.generate_content(model="gemini-2.5-flash-lite",contents=history)
+        reply=response.text
+        history.append({
+            "role":"assistant",
             "parts":[{
-                "text":query
+                "text":reply
             }]
-        }]
-    response=client.models.generate_content(model="gemini-2.5-flash-lite",contents=history)
-    reply=response.text
-    history.append({
-        "role":"assistant",
-        "parts":[{
-            "text":reply
-        }]
-    })
-    return reply,history
+        })
+        return reply,history

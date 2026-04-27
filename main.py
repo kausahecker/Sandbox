@@ -5,6 +5,7 @@ import tool_suite
 
 def init():
     load_dotenv()
+    tool_suite.init()
 
 def chat():
     while True:
