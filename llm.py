@@ -30,6 +30,8 @@ def chat():
 if __name__ == "__main__":
     chat()
 
+    
+#from google import genai
 
 #client=genai.Client(api_key="AIzaSyB_niCHDAMViEcUNORvwy37b27zQ1D4jAs")
 
